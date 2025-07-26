@@ -480,3 +480,6 @@ $RECYCLE.BIN/
 /CodingTracker.TomDonegan/TextFile1.txt
 /CodingTracker.TruthfulUK/ApplicationData.db
 /CodingTracker.TruthfulUK/Properties/launchSettings.json
+/CodingTracker.TruthfulUK/CodingTracker.Console/ApplicationData.db
+/CodingTracker.TruthfulUK/CodingTracker.Console/Properties/launchSettings.json
+/CodingTracker.TruthfulUK/CodingTracker/ApplicationData.db
