@@ -33,6 +33,9 @@ internal class Enums
         UpdateSession,
 
         [Display(Name = "Delete a Coding Session")]
-        DeleteSession
+        DeleteSession,
+
+        [Display(Name = "Back to Main Menu")]
+        BackToMain
     }
 }

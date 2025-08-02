@@ -9,5 +9,3 @@ if (File.Exists("ApplicationData.db"))
 }
 
 UserInterface.DisplayMainMenu();
-
-Console.ReadKey();
