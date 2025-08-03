@@ -1,5 +1,6 @@
 ﻿using Spectre.Console;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Reflection;
 
 namespace CodingTracker.Helpers;
@@ -29,6 +30,36 @@ internal class InputHelpers
             .AddChoices(options.Keys));
 
         return options[selectedKey];
+    }
+
+    public static DateOnly DatePrompt()
+    {
+        var dateString = AnsiConsole.Prompt(
+            new TextPrompt<string>("Enter date (DD/MM/YY):")
+            .DefaultValue(DateTime.Now.ToString("dd/MM/yy"))
+            .Validate(input =>
+            {
+                return DateTime.TryParseExact(input, "dd/MM/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _)
+                ? Spectre.Console.ValidationResult.Success()
+                : Spectre.Console.ValidationResult.Error("[red]Invalid date, please use DD/MM/YY[/]");
+            })
+        );
+        return DateOnly.ParseExact(dateString, "dd/MM/yy", CultureInfo.InvariantCulture);
+    }
+
+    public static TimeOnly TimePrompt()
+    {
+        var timeString = AnsiConsole.Prompt(
+            new TextPrompt<string>("Enter time (24 hour format - HH:mm):")
+            .DefaultValue(DateTime.Now.ToString("HH:mm"))
+            .Validate(input =>
+            {
+                return TimeOnly.TryParseExact(input, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out _)
+                ? Spectre.Console.ValidationResult.Success()
+                : Spectre.Console.ValidationResult.Error("[red]Invalid time, please use HH:MM[/]");
+            })
+        );
+        return TimeOnly.ParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture);
     }
 
     public static void PressKeyToContinue()

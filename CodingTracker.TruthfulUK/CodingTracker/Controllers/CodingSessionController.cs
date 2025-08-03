@@ -1,4 +1,5 @@
 ﻿using CodingTracker.Data;
+using CodingTracker.Helpers;
 using CodingTracker.Models;
 using Spectre.Console;
 using static CodingTracker.Helpers.Formatting;
@@ -38,6 +39,29 @@ internal class CodingSessionController
 
     internal static void LogSession()
     {
+        bool datesValidated = false;
 
+        AnsiConsole.MarkupLine("[white on blue]Tip:[/] Press enter with no input to use the [green]default values[/] (today / now)");
+        AnsiConsole.MarkupLine("Please enter the date and time your [underline]Coding Session started[/]: \n");
+        var dateStarted = InputHelpers.DatePrompt();
+        var timeStarted = InputHelpers.TimePrompt();
+        var sessionStarted = dateStarted.ToDateTime(timeStarted);
+
+        while (datesValidated == false) { 
+            AnsiConsole.MarkupLine("\n[white on blue]Tip:[/] Press enter with no input to use the [green]default values[/] (today / now)");
+            AnsiConsole.MarkupLine("Please enter the date and time your [underline]Coding Session ended[/]: \n");
+            var dateEnded = InputHelpers.DatePrompt();
+            var timeEnded = InputHelpers.TimePrompt();
+            var sessionEnded = dateEnded.ToDateTime(timeEnded);
+
+            if (sessionEnded >= sessionStarted)
+            {
+                datesValidated = true;
+            }
+            else
+            {
+                AnsiConsole.MarkupLine($"\n[red]Your session cannot end before it has started - please enter a valid end date and time.[/]\n");
+            }
+        }
     }
 }

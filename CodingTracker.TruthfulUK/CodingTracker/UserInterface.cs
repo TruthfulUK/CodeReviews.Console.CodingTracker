@@ -34,6 +34,8 @@ internal class UserInterface
                             InputHelpers.PressKeyToContinue();
                             break;
                         case CodingSessionMenu.LogSession:
+                            CodingSessionController.LogSession();
+                            InputHelpers.PressKeyToContinue();
                             break;
                         case CodingSessionMenu.UpdateSession:
                             break;
