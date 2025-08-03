@@ -41,7 +41,7 @@ internal class InputHelpers
             {
                 return DateTime.TryParseExact(input, "dd/MM/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out _)
                 ? Spectre.Console.ValidationResult.Success()
-                : Spectre.Console.ValidationResult.Error("[red]Invalid date, please use DD/MM/YY[/]");
+                : Spectre.Console.ValidationResult.Error("\n[red]Invalid date, please use DD/MM/YY[/]\n");
             })
         );
         return DateOnly.ParseExact(dateString, "dd/MM/yy", CultureInfo.InvariantCulture);
@@ -50,16 +50,32 @@ internal class InputHelpers
     public static TimeOnly TimePrompt()
     {
         var timeString = AnsiConsole.Prompt(
-            new TextPrompt<string>("Enter time (24 hour format - HH:mm):")
+            new TextPrompt<string>("Enter time (24 hour format - HH:MM):")
             .DefaultValue(DateTime.Now.ToString("HH:mm"))
             .Validate(input =>
             {
                 return TimeOnly.TryParseExact(input, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out _)
                 ? Spectre.Console.ValidationResult.Success()
-                : Spectre.Console.ValidationResult.Error("[red]Invalid time, please use HH:MM[/]");
+                : Spectre.Console.ValidationResult.Error("\n[red]Invalid time, please use (HH:MM) and enter a valid 24 hour value (e.g., 23:25 for 11:25PM)[/]\n");
             })
         );
         return TimeOnly.ParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture);
+    }
+
+    public static void DisplayHeader(string title)
+    {
+        AnsiConsole.Clear();
+        AnsiConsole.Write(
+            new FigletText("Coding Tracker")
+                .Centered()
+                .Color(Color.Blue));
+
+        var rule = 
+            new Rule($"{title}")
+                .RuleStyle("blue dim")
+                .Centered();
+
+        AnsiConsole.Write(rule);
     }
 
     public static void PressKeyToContinue()

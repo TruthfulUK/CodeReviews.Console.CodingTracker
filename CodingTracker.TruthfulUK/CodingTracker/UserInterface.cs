@@ -10,14 +10,7 @@ internal class UserInterface
     {
         while (true)
         {
-            AnsiConsole.Clear();
-            AnsiConsole.Write(
-                new FigletText("Coding Tracker")
-                    .Centered()
-                    .Color(Color.Blue));
-
-            var rule = new Rule().RuleStyle("blue dim");
-            AnsiConsole.Write(rule);
+            InputHelpers.DisplayHeader("Main Menu");
 
             var mainMenuOptions = InputHelpers.GetMenuOptions<MainMenu>();
             var mainMenuChoice = InputHelpers.SelectionPrompt(mainMenuOptions);
@@ -31,7 +24,6 @@ internal class UserInterface
                     {
                         case CodingSessionMenu.ViewRecent:
                             CodingSessionController.ViewRecent();
-                            InputHelpers.PressKeyToContinue();
                             break;
                         case CodingSessionMenu.LogSession:
                             CodingSessionController.LogSession();

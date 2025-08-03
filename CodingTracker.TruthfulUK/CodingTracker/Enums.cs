@@ -38,4 +38,16 @@ internal class Enums
         [Display(Name = "Back to Main Menu")]
         BackToMain
     }
+
+    internal enum CodingSessionViewMenu
+    {
+        [Display(Name = "Next page")]
+        NextPage,
+
+        [Display(Name = "Previous Page")]
+        PrevPage,
+
+        [Display(Name = "Back to Main Menu")]
+        BackToMain
+    }
 }

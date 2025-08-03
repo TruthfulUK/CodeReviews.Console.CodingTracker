@@ -2,6 +2,7 @@
 using CodingTracker.Helpers;
 using CodingTracker.Models;
 using Spectre.Console;
+using static CodingTracker.Enums;
 using static CodingTracker.Helpers.Formatting;
 
 namespace CodingTracker.Controllers;
@@ -9,32 +10,59 @@ internal class CodingSessionController
 {
     internal static void ViewRecent()
     {
-        List<CodingSession> rows = Database.FetchSessions(10);
+        int limit = 5;
+        int offset = 0;
+        bool exitView = false;
 
-        var CSTable = new Table();
-        CSTable
-            .AddColumn(new TableColumn("[white on blue] ID # [/]").Centered())
-            .AddColumn("[white on blue] Session Started [/]")
-            .AddColumn("[white on blue] Session Ended [/]")
-            .AddColumn("[white on blue] Duration [/]");
-
-        foreach (CodingSession row in rows)
+        while (!exitView)
         {
-            CSTable.AddRow(
-                $"{row.Id}",
-                $"{row.StartTime}",
-                $"{row.EndTime}",
-                $"{FormatTimeSpan(row.Duration)}"
-            );
+            List<CodingSession> rows = Database.FetchSessions(limit, offset);
+
+            var CSTable = new Table();
+            CSTable
+                .AddColumn(new TableColumn("[white on blue] ID # [/]").Centered())
+                .AddColumn("[white on blue] Session Started [/]")
+                .AddColumn("[white on blue] Session Ended [/]")
+                .AddColumn("[white on blue] Duration [/]");
+
+            foreach (CodingSession row in rows)
+            {
+                CSTable.AddRow(
+                    $"{row.Id}",
+                    $"{row.StartTime}",
+                    $"{row.EndTime}",
+                    $"{FormatTimeSpan(row.Duration)}"
+                );
+            }
+
+            CSTable
+                .ShowRowSeparators()
+                .Border(TableBorder.Horizontal)
+                .Expand();
+
+            InputHelpers.DisplayHeader("Recent Coding Sessions");
+
+            AnsiConsole.Write(CSTable);
+
+            var CSRecentMenu = InputHelpers.GetMenuOptions<CodingSessionViewMenu>();
+            var CSRecentMenuChoice = InputHelpers.SelectionPrompt(CSRecentMenu);
+
+            switch (CSRecentMenuChoice)
+            {
+                case CodingSessionViewMenu.NextPage:
+                    List<CodingSession> nextPageRows = Database.FetchSessions(limit, offset + limit);
+                    if (nextPageRows.Count == 0) break;
+                    offset += limit;
+                    break;
+                case CodingSessionViewMenu.PrevPage:
+                    if (offset == 0) break;
+                    offset -= limit;
+                    break;
+                case CodingSessionViewMenu.BackToMain:
+                    exitView = true;
+                    break;
+            }
         }
-
-        CSTable
-            .ShowRowSeparators()
-            .Border(TableBorder.Horizontal)
-            .Collapse();
-
-        AnsiConsole.Write(CSTable);
-
     }
 
     internal static void LogSession()
@@ -57,6 +85,7 @@ internal class CodingSessionController
             if (sessionEnded >= sessionStarted)
             {
                 datesValidated = true;
+                Database.InsertSession(FormatSQLDateString(sessionStarted), FormatSQLDateString(sessionEnded));
             }
             else
             {

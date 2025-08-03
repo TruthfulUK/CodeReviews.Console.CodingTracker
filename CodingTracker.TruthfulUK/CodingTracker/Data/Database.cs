@@ -1,7 +1,8 @@
-﻿using System.Data.SQLite;
-using System.Configuration;
+﻿using CodingTracker.Models;
 using Dapper;
-using CodingTracker.Models;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SQLite;
 
 namespace CodingTracker.Data;
 internal static class Database
@@ -28,17 +29,30 @@ internal static class Database
         }
     }
 
-    public static List<CodingSession> FetchSessions(int limit = 0)
+    public static List<CodingSession> FetchSessions(int limit = 0, int offset = 0)
     {
         using (var connection = GetConnection())
         {
             connection.Open();
-            var parameters = new { Limit = limit };
+            var parameters = new { Limit = limit, Offset = offset };
             var selectQuery = @"
                 SELECT * From CodingSessions
                 ORDER by id DESC
-                LIMIT @Limit";
+                LIMIT @Limit OFFSET @Offset";
             return connection.Query<CodingSession>(selectQuery, parameters).ToList();
+        }
+    }
+
+    public static void InsertSession(string startTime, string endTime)
+    {
+        using (var connection = GetConnection())
+        {
+            connection.Open();
+            var parameters = new { StartTime = startTime, EndTime = endTime };
+            var insertRow = @"
+                INSERT INTO CodingSessions (StartTime, EndTime) 
+                VALUES (@StartTime, @EndTime)";
+            connection.Execute(insertRow, parameters);
         }
     }
 

@@ -8,5 +8,10 @@ internal class Formatting
             { TotalMinutes: < 60 } => $"{ts.Minutes}m {ts.Seconds}s",
             _ => $"{(int)ts.TotalHours}h {ts.Minutes}m {ts.Seconds}s"
         };
+
+    internal static string FormatSQLDateString(DateTime date)
+    {
+        return date.ToString("yyyy-MM-dd HH:mm:ss");
+    }
 }
 
