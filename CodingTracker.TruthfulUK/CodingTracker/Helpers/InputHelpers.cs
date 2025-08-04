@@ -62,6 +62,21 @@ internal class InputHelpers
         return TimeOnly.ParseExact(timeString, "HH:mm", CultureInfo.InvariantCulture);
     }
 
+    public static int RowIdPrompt(List<int> rowIds)
+    {
+        var inputId = AnsiConsole.Prompt(
+            new TextPrompt<int>("Enter an ID # from the above table:")
+            .Validate(input =>
+            {
+                return rowIds.Contains(input)
+                ? Spectre.Console.ValidationResult.Success()
+                : Spectre.Console.ValidationResult.Error("\n[red]Invalid ID # - please enter an ID # from the table displayed above[/]\n");
+            })
+        );
+
+        return inputId;
+    }
+
     public static void DisplayHeader(string title)
     {
         AnsiConsole.Clear();

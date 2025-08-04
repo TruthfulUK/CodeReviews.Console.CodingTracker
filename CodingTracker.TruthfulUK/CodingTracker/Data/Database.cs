@@ -56,6 +56,33 @@ internal static class Database
         }
     }
 
+    public static void UpdateSession(int rowId, string startTime, string endTime)
+    {
+        using (var connection = GetConnection())
+        {
+            connection.Open();
+            var parameters = new { RowId = rowId, StartTime = startTime, EndTime = endTime };
+            var updateRow = @"
+                UPDATE CodingSessions 
+                SET StartTime = @StartTime, EndTime = @EndTime
+                WHERE Id = @RowId";
+            connection.Execute(updateRow, parameters);
+        }
+    }
+
+    public static void DeleteSession(int rowId)
+    {
+        using (var connection = GetConnection())
+        {
+            connection.Open();
+            var parameters = new { RowId = rowId };
+            var deleteRow = @"
+                DELETE FROM CodingSessions
+                WHERE Id = @RowId";
+            connection.Execute(deleteRow, parameters);
+        }
+    }
+
     public static void SeedDatabase()
     {
         using (var connection = GetConnection())

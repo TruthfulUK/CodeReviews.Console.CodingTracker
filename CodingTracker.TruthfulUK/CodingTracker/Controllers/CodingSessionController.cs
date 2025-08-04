@@ -8,15 +8,17 @@ using static CodingTracker.Helpers.Formatting;
 namespace CodingTracker.Controllers;
 internal class CodingSessionController
 {
-    internal static void ViewRecent()
+    internal static void ManageSessions()
     {
         int limit = 5;
+        int page = 1;
         int offset = 0;
         bool exitView = false;
 
         while (!exitView)
         {
             List<CodingSession> rows = Database.FetchSessions(limit, offset);
+            List<int> currentRowIds = new List<int>();
 
             var CSTable = new Table();
             CSTable
@@ -27,6 +29,7 @@ internal class CodingSessionController
 
             foreach (CodingSession row in rows)
             {
+                currentRowIds.Add(row.Id);
                 CSTable.AddRow(
                     $"{row.Id}",
                     $"{row.StartTime}",
@@ -40,44 +43,55 @@ internal class CodingSessionController
                 .Border(TableBorder.Horizontal)
                 .Expand();
 
-            InputHelpers.DisplayHeader("Recent Coding Sessions");
+            InputHelpers.DisplayHeader($"Coding Sessions: Page #{page}");
 
             AnsiConsole.Write(CSTable);
 
-            var CSRecentMenu = InputHelpers.GetMenuOptions<CodingSessionViewMenu>();
+            var CSRecentMenu = InputHelpers.GetMenuOptions<CodingSessionManageMenu>();
             var CSRecentMenuChoice = InputHelpers.SelectionPrompt(CSRecentMenu);
 
             switch (CSRecentMenuChoice)
             {
-                case CodingSessionViewMenu.NextPage:
+                case CodingSessionManageMenu.NextPage:
                     List<CodingSession> nextPageRows = Database.FetchSessions(limit, offset + limit);
                     if (nextPageRows.Count == 0) break;
                     offset += limit;
+                    page++;
                     break;
-                case CodingSessionViewMenu.PrevPage:
+                case CodingSessionManageMenu.PrevPage:
                     if (offset == 0) break;
                     offset -= limit;
+                    page--;
                     break;
-                case CodingSessionViewMenu.BackToMain:
+                case CodingSessionManageMenu.UpdateSession:
+                    var rowToUpdate = InputHelpers.RowIdPrompt(currentRowIds);
+                    LogSession(isUpdate: true, rowToUpdate);
+                    InputHelpers.PressKeyToContinue();
+                    break;
+                case CodingSessionManageMenu.DeleteSession:
+                    var rowToDelete = InputHelpers.RowIdPrompt(currentRowIds);
+                    DeleteSession(rowToDelete);
+                    InputHelpers.PressKeyToContinue();
+                    break;
+                case CodingSessionManageMenu.BackToMain:
                     exitView = true;
                     break;
             }
         }
     }
 
-    internal static void LogSession()
+    internal static void LogSession(bool isUpdate = false, int updateRowId = 0)
     {
         bool datesValidated = false;
 
-        AnsiConsole.MarkupLine("[white on blue]Tip:[/] Press enter with no input to use the [green]default values[/] (today / now)");
-        AnsiConsole.MarkupLine("Please enter the date and time your [underline]Coding Session started[/]: \n");
+        AnsiConsole.MarkupLine("\n[white on blue]Tip:[/] Press enter with no input to use the [green]default values[/] (today / now)\n");
+        AnsiConsole.MarkupLine("Please enter the date and time your [bold]Coding Session started[/]: \n");
         var dateStarted = InputHelpers.DatePrompt();
         var timeStarted = InputHelpers.TimePrompt();
         var sessionStarted = dateStarted.ToDateTime(timeStarted);
 
         while (datesValidated == false) { 
-            AnsiConsole.MarkupLine("\n[white on blue]Tip:[/] Press enter with no input to use the [green]default values[/] (today / now)");
-            AnsiConsole.MarkupLine("Please enter the date and time your [underline]Coding Session ended[/]: \n");
+            AnsiConsole.MarkupLine("\nPlease enter the date and time your [bold]Coding Session ended[/]: \n");
             var dateEnded = InputHelpers.DatePrompt();
             var timeEnded = InputHelpers.TimePrompt();
             var sessionEnded = dateEnded.ToDateTime(timeEnded);
@@ -85,12 +99,27 @@ internal class CodingSessionController
             if (sessionEnded >= sessionStarted)
             {
                 datesValidated = true;
-                Database.InsertSession(FormatSQLDateString(sessionStarted), FormatSQLDateString(sessionEnded));
+                if (isUpdate)
+                {
+                    Database.UpdateSession(updateRowId, FormatSQLDateString(sessionStarted), FormatSQLDateString(sessionEnded));
+                    AnsiConsole.MarkupLine($"\n[bold]Your Coding Session with the [blue]ID # {updateRowId}[/] has been successfully updated![/]");
+                } 
+                else
+                {
+                    Database.InsertSession(FormatSQLDateString(sessionStarted), FormatSQLDateString(sessionEnded));
+                    AnsiConsole.MarkupLine($"\n[bold]Your Coding Session has been successfully logged![/]");
+                }       
             }
             else
             {
                 AnsiConsole.MarkupLine($"\n[red]Your session cannot end before it has started - please enter a valid end date and time.[/]\n");
             }
         }
+    }
+
+    internal static void DeleteSession(int deleteRowId)
+    {
+        Database.DeleteSession(deleteRowId);
+        AnsiConsole.MarkupLine($"\n[bold]Your Coding Session with the [blue]ID # {deleteRowId}[/] has been successfully [red]deleted[/].[/]\n");
     }
 }

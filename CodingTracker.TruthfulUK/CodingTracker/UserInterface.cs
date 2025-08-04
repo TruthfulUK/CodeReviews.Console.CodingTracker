@@ -22,16 +22,12 @@ internal class UserInterface
                     var CSMenuChoice = InputHelpers.SelectionPrompt(CSMenu);
                     switch (CSMenuChoice)
                     {
-                        case CodingSessionMenu.ViewRecent:
-                            CodingSessionController.ViewRecent();
+                        case CodingSessionMenu.ManageSessions:
+                            CodingSessionController.ManageSessions();
                             break;
                         case CodingSessionMenu.LogSession:
                             CodingSessionController.LogSession();
                             InputHelpers.PressKeyToContinue();
-                            break;
-                        case CodingSessionMenu.UpdateSession:
-                            break;
-                        case CodingSessionMenu.DeleteSession:
                             break;
                         case CodingSessionMenu.BackToMain:
                             break;

@@ -23,29 +23,29 @@ internal class Enums
 
     internal enum CodingSessionMenu
     {
-        [Display(Name = "View Recent Sessions")]
-        ViewRecent,
+        [Display(Name = "View & Manage Logged Sessions")]
+        ManageSessions,
 
-        [Display(Name = "Log a Coding Session")]
+        [Display(Name = "Log a New Coding Session")]
         LogSession,
-
-        [Display(Name = "Update a Coding Session")]
-        UpdateSession,
-
-        [Display(Name = "Delete a Coding Session")]
-        DeleteSession,
 
         [Display(Name = "Back to Main Menu")]
         BackToMain
     }
 
-    internal enum CodingSessionViewMenu
+    internal enum CodingSessionManageMenu
     {
         [Display(Name = "Next page")]
         NextPage,
 
         [Display(Name = "Previous Page")]
         PrevPage,
+
+        [Display(Name = "Update a Session")]
+        UpdateSession,
+
+        [Display(Name = "Delete a Session")]
+        DeleteSession,
 
         [Display(Name = "Back to Main Menu")]
         BackToMain
