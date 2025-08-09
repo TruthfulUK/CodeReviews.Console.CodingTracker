@@ -1,6 +1,5 @@
 ﻿using CodingTracker.Models;
 using Dapper;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SQLite;
 

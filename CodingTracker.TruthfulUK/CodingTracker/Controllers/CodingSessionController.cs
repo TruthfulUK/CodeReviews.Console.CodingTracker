@@ -13,9 +13,9 @@ internal class CodingSessionController
         int limit = 5;
         int page = 1;
         int offset = 0;
-        bool exitView = false;
+        bool exitSessionManager = false;
 
-        while (!exitView)
+        while (!exitSessionManager)
         {
             List<CodingSession> rows = Database.FetchSessions(limit, offset);
             List<int> currentRowIds = new List<int>();
@@ -74,7 +74,7 @@ internal class CodingSessionController
                     InputHelpers.PressKeyToContinue();
                     break;
                 case CodingSessionManageMenu.BackToMain:
-                    exitView = true;
+                    exitSessionManager = true;
                     break;
             }
         }

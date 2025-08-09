@@ -1,5 +1,5 @@
 ﻿namespace CodingTracker.Helpers;
-internal class Formatting
+internal static class Formatting
 {
     internal static string FormatTimeSpan(TimeSpan ts) =>
         ts switch

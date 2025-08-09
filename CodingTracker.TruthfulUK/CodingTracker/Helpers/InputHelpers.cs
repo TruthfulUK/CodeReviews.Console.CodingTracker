@@ -77,6 +77,18 @@ internal class InputHelpers
         return inputId;
     }
 
+    public static bool ConfirmationPrompt(string text, bool defaultValue)
+    {
+        var confirmaiton = AnsiConsole.Prompt(
+            new TextPrompt<bool>(text)
+            .AddChoice(true)
+            .AddChoice(false)
+            .DefaultValue(defaultValue)
+            .WithConverter(choice => choice ? "Y" : "N"));
+
+        return confirmaiton;
+    }
+
     public static void DisplayHeader(string title)
     {
         AnsiConsole.Clear();

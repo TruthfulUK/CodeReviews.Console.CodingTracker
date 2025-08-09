@@ -37,7 +37,7 @@ internal class UserInterface
                     InputHelpers.PressKeyToContinue();
                     break;
                 case MainMenu.StopwatchMode:
-                    InputHelpers.PressKeyToContinue();
+                    StopwatchController.StartTimedSession();
                     break;
                 case MainMenu.Reporting:
                     InputHelpers.PressKeyToContinue();
