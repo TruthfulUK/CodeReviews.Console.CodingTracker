@@ -135,12 +135,12 @@ internal class CodingSessionController
             {
                 if (isUpdate)
                 {
-                    Database.UpdateSession(updateRowId, FormatSQLDateTimeString(sessionStarted), FormatSQLDateTimeString(sessionEnded));
+                    Database.UpdateSession(updateRowId, FormalSqlDateTimeString(sessionStarted), FormalSqlDateTimeString(sessionEnded));
                     AnsiConsole.MarkupLine($"\n[bold]Your Coding Session with the [blue]ID # {updateRowId}[/] has been successfully updated![/]");
                 } 
                 else
                 {
-                    Database.InsertSession(FormatSQLDateTimeString(sessionStarted), FormatSQLDateTimeString(sessionEnded));
+                    Database.InsertSession(FormalSqlDateTimeString(sessionStarted), FormalSqlDateTimeString(sessionEnded));
                     AnsiConsole.MarkupLine($"\n[bold]Your Coding Session has been successfully logged![/]");
                 }
                 datesValidated = true;

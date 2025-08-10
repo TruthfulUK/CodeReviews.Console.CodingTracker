@@ -115,7 +115,7 @@ internal static class GoalController
             new TextPrompt<int>("\nEnter the number of Coding Hours you want to aim for: ")
         );
 
-        Database.CreateGoal(FormatSQLDateOnlyString(goalStart), FormatSQLDateOnlyString(goalEnd), goalHours * 60);
+        Database.CreateGoal(FormatSqlDateOnlyString(goalStart), FormatSqlDateOnlyString(goalEnd), goalHours * 60);
 
         AnsiConsole.MarkupLine($"\n[bold]Your goal of logging {goalHours} Coding hours between {goalStart} and {goalEnd} has been successfully added![/]");
 

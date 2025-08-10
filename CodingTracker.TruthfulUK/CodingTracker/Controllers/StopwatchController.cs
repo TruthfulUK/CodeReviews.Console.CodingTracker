@@ -41,7 +41,7 @@ internal static class StopwatchController
 
     internal static void LogSession(CodingSession session)
     {
-        Database.InsertSession(FormatSQLDateTimeString(session.StartTime), FormatSQLDateTimeString(session.EndTime));
+        Database.InsertSession(FormalSqlDateTimeString(session.StartTime), FormalSqlDateTimeString(session.EndTime));
         AnsiConsole.MarkupLine($"\n[bold]Your Coding Session has been successfully logged![/]");
     }
 }
