@@ -1,6 +1,5 @@
 ﻿using CodingTracker.Controllers;
 using CodingTracker.Helpers;
-using Spectre.Console;
 using static CodingTracker.Enums;
 
 namespace CodingTracker;
@@ -23,7 +22,10 @@ internal class UserInterface
                     switch (CSMenuChoice)
                     {
                         case CodingSessionMenu.ManageSessions:
-                            CodingSessionController.ManageSessions();
+                            CodingSessionController.ViewManageAllSessions();
+                            break;
+                        case CodingSessionMenu.PeriodSessions:
+                            CodingSessionController.ViewManageFilteredSessions();
                             break;
                         case CodingSessionMenu.LogSession:
                             CodingSessionController.LogSession();
@@ -33,14 +35,14 @@ internal class UserInterface
                             break;
                     }
                     break;
-                case MainMenu.ManageGoals:
-                    InputHelpers.PressKeyToContinue();
-                    break;
                 case MainMenu.StopwatchMode:
                     StopwatchController.StartTimedSession();
                     break;
-                case MainMenu.Reporting:
-                    InputHelpers.PressKeyToContinue();
+                case MainMenu.Reports:
+                    ReportsController.GenerateReport();
+                    break;
+                case MainMenu.Goals:
+                    GoalController.DisplayMenu();
                     break;
                 case MainMenu.ExitApplication:
                     Environment.Exit(0);

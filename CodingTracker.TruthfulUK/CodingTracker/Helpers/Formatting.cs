@@ -9,9 +9,14 @@ internal static class Formatting
             _ => $"{(int)ts.TotalHours}h {ts.Minutes}m {ts.Seconds}s"
         };
 
-    internal static string FormatSQLDateString(DateTime date)
+    internal static string FormatSQLDateTimeString(DateTime date)
     {
         return date.ToString("yyyy-MM-dd HH:mm:ss");
+    }
+
+    internal static string FormatSQLDateOnlyString(DateOnly date)
+    {
+        return date.ToString("yyyy-MM-dd");
     }
 }
 

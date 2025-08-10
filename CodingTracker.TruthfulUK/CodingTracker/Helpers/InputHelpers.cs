@@ -77,6 +77,18 @@ internal class InputHelpers
         return inputId;
     }
 
+    public static int PeriodLengthPrompt(string text)
+    {
+        var period = AnsiConsole.Prompt(
+            new TextPrompt<int>(text)
+            .Validate(input =>
+                input > 0
+                ? Spectre.Console.ValidationResult.Success()
+                : Spectre.Console.ValidationResult.Error("\n[red]Invalid number, please enter a value greater than 0.[/]\n"))
+        );
+        return period;
+    }
+
     public static bool ConfirmationPrompt(string text, bool defaultValue)
     {
         var confirmaiton = AnsiConsole.Prompt(
@@ -111,9 +123,9 @@ internal class InputHelpers
         AnsiConsole.Write(rule);
 
         var paddedContinueText =
-            new Text("Press [Any Key] to return to the menu...",
+            new Text("Display paused - press any key to continue",
             new Style(Color.Blue));
-        var paddedContinue = new Padder(paddedContinueText).PadTop(2).PadBottom(2).PadLeft(0);
+        var paddedContinue = new Padder(paddedContinueText).PadTop(1);
         AnsiConsole.Write(paddedContinue);
         Console.ReadKey();
     }

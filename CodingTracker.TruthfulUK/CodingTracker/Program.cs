@@ -1,11 +1,10 @@
 ﻿using CodingTracker;
 using CodingTracker.Data;
 
-if (File.Exists("ApplicationData.db"))
+if (!File.Exists("ApplicationData.db"))
 {
-    File.Delete("ApplicationData.db");
     Database.InitializeDatabase();
-    Database.SeedDatabase();
+    SeedData.Initialize();
 }
 
 UserInterface.DisplayMainMenu();

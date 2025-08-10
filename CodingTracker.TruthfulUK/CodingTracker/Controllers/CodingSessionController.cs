@@ -8,7 +8,7 @@ using static CodingTracker.Helpers.Formatting;
 namespace CodingTracker.Controllers;
 internal class CodingSessionController
 {
-    internal static void ManageSessions()
+    internal static void ViewManageAllSessions(string period = "", int periodRange = 0)
     {
         int limit = 5;
         int page = 1;
@@ -17,19 +17,28 @@ internal class CodingSessionController
 
         while (!exitSessionManager)
         {
-            List<CodingSession> rows = Database.FetchSessions(limit, offset);
-            List<int> currentRowIds = new List<int>();
-
+            
             var CSTable = new Table();
             CSTable
                 .AddColumn(new TableColumn("[white on blue] ID # [/]").Centered())
                 .AddColumn("[white on blue] Session Started [/]")
                 .AddColumn("[white on blue] Session Ended [/]")
-                .AddColumn("[white on blue] Duration [/]");
+                .AddColumn("[white on blue] Duration [/]")
+                .ShowRowSeparators()
+                .Border(TableBorder.Horizontal)
+                .Expand();
+            
+            List<CodingSession> rows = string.IsNullOrEmpty(period)
+                ? Database.FetchSessions(limit, offset)
+                : Database.FetchSessions(limit, offset, period, periodRange);
 
+            List<int> currentRowIds = new List<int>();
+            TimeSpan totalTimeLogged = new TimeSpan();
+            
             foreach (CodingSession row in rows)
             {
                 currentRowIds.Add(row.Id);
+                totalTimeLogged += row.Duration;
                 CSTable.AddRow(
                     $"{row.Id}",
                     $"{row.StartTime}",
@@ -38,12 +47,7 @@ internal class CodingSessionController
                 );
             }
 
-            CSTable
-                .ShowRowSeparators()
-                .Border(TableBorder.Horizontal)
-                .Expand();
-
-            InputHelpers.DisplayHeader($"Coding Sessions: Page #{page}");
+            InputHelpers.DisplayHeader($"Page #{page}");
 
             AnsiConsole.Write(CSTable);
 
@@ -53,7 +57,9 @@ internal class CodingSessionController
             switch (CSRecentMenuChoice)
             {
                 case CodingSessionManageMenu.NextPage:
-                    List<CodingSession> nextPageRows = Database.FetchSessions(limit, offset + limit);
+                    List<CodingSession> nextPageRows = string.IsNullOrEmpty(period)
+                        ? Database.FetchSessions(limit, offset + limit)
+                        : Database.FetchSessions(limit, offset + limit, period, periodRange);
                     if (nextPageRows.Count == 0) break;
                     offset += limit;
                     page++;
@@ -80,6 +86,35 @@ internal class CodingSessionController
         }
     }
 
+    internal static void ViewManageFilteredSessions()
+    {
+
+        AnsiConsole.Clear();
+        InputHelpers.DisplayHeader($"Filter Coding Sessions");
+
+        var PeriodFilters = InputHelpers.GetMenuOptions<CodingSessionPeriodOptions>();
+        var PeriodFiltersOption = InputHelpers.SelectionPrompt(PeriodFilters);
+        int days = 0;
+
+        AnsiConsole.MarkupLine($"\n[white on blue] Note: [/] This will display all of your logged Coding Sessions from the entered timeframe in Days, Weeks or Months to today.\n");
+
+        switch (PeriodFiltersOption)
+        {
+            case CodingSessionPeriodOptions.Days:
+                days = InputHelpers.PeriodLengthPrompt("Enter number of days (from today):");
+                ViewManageAllSessions("Day", days);
+                break;
+            case CodingSessionPeriodOptions.Weeks:
+                days = InputHelpers.PeriodLengthPrompt("Enter number of weeks (from today):");
+                ViewManageAllSessions("Day", days * 7);
+                break;
+            case CodingSessionPeriodOptions.Months:
+                int months = InputHelpers.PeriodLengthPrompt("Enter number of months (from today):");
+                ViewManageAllSessions("Month", months);
+                break;
+        }
+    }
+
     internal static void LogSession(bool isUpdate = false, int updateRowId = 0)
     {
         bool datesValidated = false;
@@ -98,17 +133,17 @@ internal class CodingSessionController
 
             if (sessionEnded >= sessionStarted)
             {
-                datesValidated = true;
                 if (isUpdate)
                 {
-                    Database.UpdateSession(updateRowId, FormatSQLDateString(sessionStarted), FormatSQLDateString(sessionEnded));
+                    Database.UpdateSession(updateRowId, FormatSQLDateTimeString(sessionStarted), FormatSQLDateTimeString(sessionEnded));
                     AnsiConsole.MarkupLine($"\n[bold]Your Coding Session with the [blue]ID # {updateRowId}[/] has been successfully updated![/]");
                 } 
                 else
                 {
-                    Database.InsertSession(FormatSQLDateString(sessionStarted), FormatSQLDateString(sessionEnded));
+                    Database.InsertSession(FormatSQLDateTimeString(sessionStarted), FormatSQLDateTimeString(sessionEnded));
                     AnsiConsole.MarkupLine($"\n[bold]Your Coding Session has been successfully logged![/]");
-                }       
+                }
+                datesValidated = true;
             }
             else
             {

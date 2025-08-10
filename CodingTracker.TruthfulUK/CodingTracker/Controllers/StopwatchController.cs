@@ -23,7 +23,7 @@ internal static class StopwatchController
         {
             stopwatch.Start();
             session.StartTime = DateTime.Now;
-            AnsiConsole.MarkupLine($"\nYour Timed Coding Session has started. The default value is set to `N` so you do not accidentally end your session. Type and Enter 'Y' to explicity end the timer.\n");
+            AnsiConsole.MarkupLine($"\n[bold]Your Timed Coding Session has started.[/] The default value is now set to `N` so you do not accidentally end your session. Please type and Enter 'Y' to explicity end the timer.\n");
 
             while (!sessionEnded)
             {
@@ -41,7 +41,7 @@ internal static class StopwatchController
 
     internal static void LogSession(CodingSession session)
     {
-        Database.InsertSession(FormatSQLDateString(session.StartTime), FormatSQLDateString(session.EndTime));
+        Database.InsertSession(FormatSQLDateTimeString(session.StartTime), FormatSQLDateTimeString(session.EndTime));
         AnsiConsole.MarkupLine($"\n[bold]Your Coding Session has been successfully logged![/]");
     }
 }
