@@ -4,7 +4,7 @@
 
 Developed with C#, Dapper, Spectre Console and SQLite.
 
-![Screenshot of the Coding Tracker Main Menu](/assets/main_menu.png)
+![Screenshot of the Coding Tracker Main Menu](assets/main_menu.png)
 
 # Requirements:
 - :white_check_mark: This application has the same requirements as the previous project, except that now you'll be logging your daily coding time.
@@ -50,7 +50,7 @@ Developed with C#, Dapper, Spectre Console and SQLite.
 Upon first starting the application, if a local database does not already exist the application initializes the creation of a new database and seeds it with Coding Session data for the project and debugging purposes.
 
 ### :pencil2: Manage Coding Sessions
-![Screenshot of the Coding Tracker Manage Coding Sessions Menu](/assets/manage_view_coding_sessions.png)
+![Screenshot of the Coding Tracker Manage Coding Sessions Menu](assets/manage_view_coding_sessions.png)
 
 **View & Manage All Logged Sessions:** User is able to view all logged sessions in a table view with page navigation and update / delete present sessions.
 
@@ -59,17 +59,17 @@ Upon first starting the application, if a local database does not already exist 
 **Log a Coding Sessions:** User is able to manually log a Coding Session, they will prompted to enter the Coding Session Start Time and End Time, duration of the session will be automatically calculated within the model.
   
 ### :watch: Stopwatch Mode
-![Screenshot of a finished Stopwatch Mode session](/assets/stopwatch.png)
+![Screenshot of a finished Stopwatch Mode session](assets/stopwatch.png)
 
 If a user would like to record and time their Coding Session as it happens they can do so using Stopwatch mode. The recorded time will then be logged as a new Coding Session when the session has been explicitly ended by the user and present them with the logged time.
 
 ### :page_with_curl: Generate Report
-![Screenshot of an example report](/assets/report.png)
+![Screenshot of an example report](assets/report.png)
 
 A user can generate a summary report of total logged coding time and the average Coding Session length. Reports can be generated for the last X Days, Weeks or Months relative to the current date.
 
 ### :star: Goals
-![Screenshot of the View Goals & Status table](/assets/goals.png)
+![Screenshot of the View Goals & Status table](assets/goals.png)
 
 **View Goals & Status:** User is able to view all of their created goals in a table view. The overview provides the current standing of each goal including how much time they've already logged within the goal timeline and how much time they should aim to code and log each day to reach their goal.
 
