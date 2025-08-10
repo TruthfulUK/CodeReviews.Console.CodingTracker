@@ -79,9 +79,7 @@ A user can generate a summary report of total logged coding time and the average
 
 - Working with TimeSpan, DateTime, DateOnly and TimeOnly presented many challenges from converting, parsing and formatting. 
 
-- Determining where certain logic should sit proved confusing at times however implementing a more rigid structure and seperation of concerns helped greatly to 
-
-- Difficulty understanding / finding the Microsoft.Data.Sqlite documentation which replaced System.Data.Sqlite
+- Determining where certain logic should sit proved confusing at times however implementing a more rigid structure regardless and seperation of concerns it helped to keep things organized until I'm able to learn more about patterns / structure best practices. 
 
 # Resources Used
 
